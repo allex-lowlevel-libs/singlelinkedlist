@@ -1,6 +1,6 @@
 {
   "name": "allex_singlelinkedlistlowlevellib",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Traversable JavaScript single linked list",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/allex-lowlevel-libs/singlelinkedlist.git"
+  },
+  "devDependencies": {
+    "chai": "3.x"
   },
   "keywords": [
     "ecosystem:AllexJS",

@@ -1,10 +1,13 @@
 'use strict';
+
 var Iterator = require('./Iterator');
+
 function ListItem(content){
   this.link = null;
   this.content = content;
   this.iterator = null;
 }
+
 ListItem.prototype.destroy = function(){
   if (this.iterator && this.link) {
     //console.log('passing my iterator to my link');
@@ -14,6 +17,7 @@ ListItem.prototype.destroy = function(){
   this.content = null;
   this.link = null;
 };
+
 ListItem.prototype.linkTo = function(item){
   if(item){
     if(item.link){
@@ -22,9 +26,11 @@ ListItem.prototype.linkTo = function(item){
     item.link = this;
   }
 };
+
 ListItem.prototype.empty = function(){
   return 'undefined' === typeof this.content;
 };
+
 ListItem.prototype.apply = function(func){
   if('undefined' !== typeof this.content){
     try {
@@ -37,16 +43,26 @@ ListItem.prototype.apply = function(func){
 };
 
 function List(sortfunction){
+  //TODO check if it is reasonable to throw in constructor
+  /*
+  if (!!sortfunction){
+    if ('function' !== typeof sortfunction){
+      throw new Error('First parameter is not a function.');
+    }
+  }
+  */
   this.head = new ListItem();
   this.sorter = sortfunction || null;
   this.length = 0;
 }
+
 List.prototype.destroy = function(){
   this.purge();
   this.length = null;
   this.sorter = null;
   this.head = null;
 };
+
 List.prototype.purge = function(){
   var item = this.head, ditem;
   while(item){
@@ -57,9 +73,11 @@ List.prototype.purge = function(){
   this.head.content = void 0;
   this.length=0;
 };
+
 List.prototype.empty = function(){
   return !this.head.content;
 };
+
 List.prototype.add = function(content,afteritem){
   if(this.head.empty()){
     this.head.content = content;
@@ -77,8 +95,12 @@ List.prototype.add = function(content,afteritem){
   this.length++;
   return newitem;
 };
+
 List.prototype.removeOne = function(listitem){
   var item = this.head, previtem;
+  if (listitem === null || 'object' !== typeof listitem || !(listitem instanceof ListItem)){
+    throw new Error('Item is not instance of ListItem');
+  }
   while(item){
     if(item===listitem){
       if(item===this.head){
@@ -98,21 +120,26 @@ List.prototype.removeOne = function(listitem){
     previtem = item;
     item = item.link;
   }
-  console.trace();
-  throw 'Item not found to destroy';
+  //console.trace();
+  throw new Error('Item not found to destroy');
 };
+
 List.prototype.findOne = function(criterionfunction){
   var item = this.firstItemToSatisfy(criterionfunction);
   if(item){
     return item.content;
   }
 };
+
 List.prototype.firstItemToSatisfy = function(func){
   var check=false, item = this.head;
-  while(!check&&item){
+  if ('function' !== typeof func){
+    throw new Error('First parameter is not a function.');
+  }
+  while(!check && item){
     check = item.apply(func);
     if('boolean' !== typeof check){
-      throw 'func needs to return a boolean value';
+      throw new Error('func needs to return a boolean value');
     }
     if(check){
       return item;
@@ -122,12 +149,16 @@ List.prototype.firstItemToSatisfy = function(func){
   }
   return item;
 };
+
 List.prototype.lastItemToSatisfy = function(func){
   var check, item = this.head, ret;
+  if ('function' !== typeof func){
+    throw new Error('First parameter is not a function.');
+  }
   while(item){
     check = item.apply(func);
     if('boolean' !== typeof check){
-      throw 'func needs to return a boolean value';
+      throw new Error('func needs to return a boolean value');
     }
     if(!check){
       return ret;
@@ -138,6 +169,7 @@ List.prototype.lastItemToSatisfy = function(func){
   }
   return ret;
 };
+
 List.prototype.itemAfterWhichToInsert = function(content){
   if(!this.sorter){
     return null;
@@ -149,7 +181,7 @@ List.prototype.itemAfterWhichToInsert = function(content){
     }
     check = this.sorter(content,item.content);
     if('boolean' !== typeof check){
-      throw 'func needs to return a boolean value';
+      throw new Error('func needs to return a boolean value');
     }
     if(!check){
       return ret;
@@ -160,7 +192,12 @@ List.prototype.itemAfterWhichToInsert = function(content){
   }
   return ret;
 };
+
 List.prototype.traverse = function(func){
+  //TODO integrate checks
+  if ('function' !== typeof func){
+    throw new Error('First parameter is not a function.');
+  }
   var it = new Iterator(func);
   it.setTargetItem(this.head);
   while(it.cb) {
@@ -173,7 +210,11 @@ List.prototype.traverse = function(func){
     }
   }
 };
+
 List.prototype.traverseConditionally = function(func){
+  if ('function' !== typeof func){
+    throw new Error('First parameter is not a function.');
+  }
   var it = new Iterator(func), result;
   it.setTargetItem(this.head);
   while(it.cb) {
@@ -190,13 +231,16 @@ List.prototype.traverseConditionally = function(func){
     }
   }
 };
+
 List.prototype.dumpToConsole = function(){
   this.traverse(console.log.bind(console));
 };
+
 function drainer(arry,countobj,content){
   arry[countobj.count] = content;
   countobj.count++;
 }
+
 List.prototype.drain = function(){
   var ret = new Array(this.length),countobj={count:0};
   this.traverse(drainer.bind(null,ret,countobj));

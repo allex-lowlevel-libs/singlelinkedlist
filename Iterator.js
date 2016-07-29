@@ -7,6 +7,7 @@ function Iterator(cb, reverse){
   this.passes = 0;
   this.reverse = reverse||false;
 }
+
 Iterator.prototype.destroy = function () {
   //console.log(this.passes, 'passes');
   this.reverse = null;
@@ -20,12 +21,15 @@ Iterator.prototype.destroy = function () {
   this.cb = null;
   this._needsNext = null;
 };
+
 Iterator.prototype.finished = function () {
   return !this.cb;
 };
+
 Iterator.prototype.needsNext = function () {
   return this._needsNext;
 };
+
 Iterator.prototype.setTargetItem = function (item) {
   if (!item) {
     this.destroy();
@@ -42,6 +46,7 @@ Iterator.prototype.setTargetItem = function (item) {
   this.targetitem = item;
   item.iterator = this;
 };
+
 Iterator.prototype.run = function () {
   if (!this.targetitem) {
     this.destroy();
