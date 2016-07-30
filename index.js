@@ -43,14 +43,12 @@ ListItem.prototype.apply = function(func){
 };
 
 function List(sortfunction){
-  //TODO check if it is reasonable to throw in constructor
-  /*
   if (!!sortfunction){
     if ('function' !== typeof sortfunction){
+      console.trace();
       throw new Error('First parameter is not a function.');
     }
   }
-  */
   this.head = new ListItem();
   this.sorter = sortfunction || null;
   this.length = 0;
