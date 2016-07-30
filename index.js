@@ -77,13 +77,14 @@ List.prototype.empty = function(){
 };
 
 List.prototype.add = function(content,afteritem){
+  var newitem,item;
   if(this.head.empty()){
     this.head.content = content;
     this.length = 1;
     return this.head;
   }
-  var newitem = new ListItem(content);
-  var item = afteritem || this.itemAfterWhichToInsert(content);
+  newitem = new ListItem(content);
+  item = afteritem || this.itemAfterWhichToInsert(content);
   if(!item){
     this.head.linkTo(newitem);
     this.head = newitem;
@@ -169,10 +170,10 @@ List.prototype.lastItemToSatisfy = function(func){
 };
 
 List.prototype.itemAfterWhichToInsert = function(content){
+  var check, item = this.head, ret;
   if(!this.sorter){
     return null;
   }
-  var check, item = this.head, ret;
   while(item){
     if(typeof item.content === 'undefined'){
       return item;
@@ -193,10 +194,11 @@ List.prototype.itemAfterWhichToInsert = function(content){
 
 List.prototype.traverse = function(func){
   //TODO integrate checks
+  var it;
   if ('function' !== typeof func){
     throw new Error('First parameter is not a function.');
   }
-  var it = new Iterator(func);
+  it = new Iterator(func);
   it.setTargetItem(this.head);
   while(it.cb) {
     it.run();
@@ -210,10 +212,11 @@ List.prototype.traverse = function(func){
 };
 
 List.prototype.traverseConditionally = function(func){
+  var it;
   if ('function' !== typeof func){
     throw new Error('First parameter is not a function.');
   }
-  var it = new Iterator(func), result;
+  it = new Iterator(func), result;
   it.setTargetItem(this.head);
   while(it.cb) {
     result = it.run();

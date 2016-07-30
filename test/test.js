@@ -3,15 +3,16 @@ var expect = require('chai').expect,
 
 describe('Testing \'Signle linked list\' lib', function(){
   it('Length tests', function(){
+    var i;
     var list = new List();
     expect(list.length).to.be.equal(0);
-    for (var i=0; i<100; i++){
+    for (i=0; i<100; i++){
       list.add(i);
     }
     expect(list.length).to.be.equal(100);
     list.purge();
     expect(list.length).to.be.equal(0);
-    for (var i=0; i<50; i++){
+    for (i=0; i<50; i++){
       list.add(i);
     }
     expect(list.length).to.be.equal(50);
@@ -20,20 +21,21 @@ describe('Testing \'Signle linked list\' lib', function(){
   });
 
   it('Structure tests (Chaining)', function(){
-    var list = new List();
+    var list,first,second,third,fourth;
+    list = new List();
     //Adding to the front if no 2nd param!
-    var third = list.add(3); 
-    var second = list.add(2); 
-    var first = list.add(1); 
+    third = list.add(3); 
+    second = list.add(2); 
+    first = list.add(1); 
     expect(first.link).to.be.equal(second);
     expect(second.link).to.be.equal(third);
     expect(third.link).to.be.null;
 
     list.purge();
 
-    var first = list.add(1); 
-    var second = list.add(2,first); 
-    var third = list.add(3,second); 
+    first = list.add(1); 
+    second = list.add(2,first); 
+    third = list.add(3,second); 
     expect(first.link).to.be.equal(second);
     expect(second.link).to.be.equal(third);
     expect(third.link).to.be.null;
@@ -43,10 +45,10 @@ describe('Testing \'Signle linked list\' lib', function(){
 
     list.purge();
 
-    var first = list.add(1); 
-    var second = list.add(2,first); 
-    var third = list.add(3,second); 
-    var fourth = list.add(4,third); 
+    first = list.add(1); 
+    second = list.add(2,first); 
+    third = list.add(3,second); 
+    fourth = list.add(4,third); 
 
     expect(first.link).to.be.equal(second);
     expect(second.link).to.be.equal(third);
@@ -66,25 +68,26 @@ describe('Testing \'Signle linked list\' lib', function(){
 
   it('List with sortfunction (>=)', function(){
     //Sort function example
-    var sortfunction = function(a,b){
+    var sortfunction,first,second,third,newElem,newElem2;
+    sortfunction = function(a,b){
       return a >= b;
     }
-    var list = new List(sortfunction);
+    list = new List(sortfunction);
 
-    var third = list.add(9); 
-    var second = list.add(5); 
-    var first = list.add(1); 
+    third = list.add(9); 
+    second = list.add(5); 
+    first = list.add(1); 
 
     expect(first.link).to.be.equal(second);
     expect(second.link).to.be.equal(third);
     expect(third.link).to.be.null;
 
-    var newElem = list.add(7)
+    newElem = list.add(7)
 
     expect(second.link).to.be.equal(newElem);
     expect(newElem.link).to.be.equal(third);
 
-    var newElem2 = list.add(7)
+    newElem2 = list.add(7)
 
     expect(newElem.link).to.be.equal(newElem2);
     expect(newElem2.link).to.be.equal(third);
@@ -93,25 +96,26 @@ describe('Testing \'Signle linked list\' lib', function(){
 
   it('List with sortfunction (>)', function(){
     //Sort function example
-    var sortfunction = function(a,b){
+    var sortfunction,first,second,third,newElem,newElem2;
+    sortfunction = function(a,b){
       return a > b;
     }
-    var list = new List(sortfunction);
+    list = new List(sortfunction);
 
-    var third = list.add(9); 
-    var second = list.add(5); 
-    var first = list.add(1); 
+    third = list.add(9); 
+    second = list.add(5); 
+    first = list.add(1); 
 
     expect(first.link).to.be.equal(second);
     expect(second.link).to.be.equal(third);
     expect(third.link).to.be.null;
 
-    var newElem = list.add(7)
+    newElem = list.add(7)
 
     expect(second.link).to.be.equal(newElem);
     expect(newElem.link).to.be.equal(third);
 
-    var newElem2 = list.add(7)
+    newElem2 = list.add(7)
 
     expect(second.link).to.be.equal(newElem2);
     expect(newElem2.link).to.be.equal(newElem);
@@ -119,12 +123,13 @@ describe('Testing \'Signle linked list\' lib', function(){
   });
 
   it('removeOne', function(){
-    var list = new List();
+    var list,first,second,third,obj;
+    list = new List();
 
-    var third = list.add(3); 
-    var second = list.add(2); 
-    var first = list.add(1); 
-    var obj = {};
+    third = list.add(3); 
+    second = list.add(2); 
+    first = list.add(1); 
+    obj = {};
 
     expect(list.removeOne.bind(list,null)).to.throw(Error,/Item is not instance of/);
     expect(list.removeOne.bind(list)).to.throw(Error,/Item is not instance of/);
@@ -136,16 +141,17 @@ describe('Testing \'Signle linked list\' lib', function(){
   });
 
   it('firstItemToSatisfy', function(){
-    var list = new List();
+    var list,first,second,third,func;
+    list = new List();
 
-    var third = list.add(3); 
-    var second = list.add(2); 
-    var first = list.add(1); 
+    third = list.add(3); 
+    second = list.add(2); 
+    first = list.add(1); 
 
     expect(list.firstItemToSatisfy.bind(list,null)).to.throw(Error,/not a function/);
     expect(list.firstItemToSatisfy.bind(list)).to.throw(Error,/not a function/);
 
-    var func = function(){
+    func = function(){
       return 3;
     };
     expect(list.firstItemToSatisfy.bind(list,func)).to.throw(Error,/needs to return a boolean/);
@@ -167,13 +173,14 @@ describe('Testing \'Signle linked list\' lib', function(){
   });
 
   it('traverse', function(){
-    var list = new List();
+    var list,first,second,third,exp;
+    list = new List();
 
-    var third = list.add(3); 
-    var second = list.add(2); 
-    var first = list.add(1); 
+    third = list.add(3); 
+    second = list.add(2); 
+    first = list.add(1); 
     
-    var exp = function(content,item){
+    exp = function(content,item){
       item.content *= item.content;
     };
 
@@ -188,13 +195,14 @@ describe('Testing \'Signle linked list\' lib', function(){
   });
 
   it('traverseConditionally', function(){
-    var list = new List();
+    var list,first,second,third,bingo;
+    list = new List();
 
-    var third = list.add(5); 
-    var second = list.add(3); 
-    var first = list.add(1); 
+    third = list.add(5); 
+    second = list.add(3); 
+    first = list.add(1); 
 
-    var bingo = function(content,item){
+    bingo = function(content,item){
       if (content > 3) return 'Bingo' + content;
     };
 

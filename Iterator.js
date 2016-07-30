@@ -48,6 +48,7 @@ Iterator.prototype.setTargetItem = function (item) {
 };
 
 Iterator.prototype.run = function () {
+  var ti, ret;
   if (!this.targetitem) {
     this.destroy();
     return;
@@ -56,9 +57,9 @@ Iterator.prototype.run = function () {
     this.destroy();
     return;
   }
-  var ti = this.targetitem;
+  ti = this.targetitem;
   this.targetitem = null;
-  var ret = ti.apply(this.cb);
+  ret = ti.apply(this.cb);
   this.passes++;
   ti.iterator = null;
   if (!this.targetitem) {
