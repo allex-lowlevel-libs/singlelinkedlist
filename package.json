@@ -1,6 +1,6 @@
 {
   "name": "allex_singlelinkedlistlowlevellib",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Traversable JavaScript single linked list",
   "main": "index.js",
   "scripts": {

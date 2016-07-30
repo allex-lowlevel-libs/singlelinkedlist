@@ -212,11 +212,11 @@ List.prototype.traverse = function(func){
 };
 
 List.prototype.traverseConditionally = function(func){
-  var it;
+  var it,result;
   if ('function' !== typeof func){
     throw new Error('First parameter is not a function.');
   }
-  it = new Iterator(func), result;
+  it = new Iterator(func);
   it.setTargetItem(this.head);
   while(it.cb) {
     result = it.run();
